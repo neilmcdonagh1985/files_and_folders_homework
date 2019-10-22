@@ -1,11 +1,31 @@
 package com.example.fileservice.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
 import java.util.List;
 
+
+@Entity
+@Table(name = "folders")
 public class Folder {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+
+    @Column(name = "title")
     private String title;
+
+    @JsonIgnoreProperties("folder")
+    @OneToMany(mappedBy = "folder")
     private List<File> files;
+
+
+    @JsonIgnoreProperties
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Folder(String title, User user) {
@@ -13,6 +33,8 @@ public class Folder {
         this.files = files;
         this.user = user;
     }
+
+    public Folder() {}
 
     public String getTitle() {
         return title;
@@ -36,5 +58,14 @@ public class Folder {
 
     public void setUser(User user) {
         this.user = user;
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
